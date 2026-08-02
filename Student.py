@@ -1,7 +1,8 @@
 
 Student Management System (student.py)
 
-import json import os
+import json
+ import os
 
 FILE_NAME = "students.json"
 
