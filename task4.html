@@ -1,0 +1,99 @@
+html<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 4: Language Learning App</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0fdf4; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        .container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; margin-bottom: 20px; }
+        h2 { color: #16a34a; }
+        .word-box { background: #dcfce7; padding: 15px; border-radius: 8px; margin: 15px 0; font-size: 1.2rem; font-weight: bold; }
+        .btn { background: #16a34a; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 1rem; margin: 5px; }
+        .btn:hover { background: #15803d; }
+        .quiz-box { display: none; margin-top: 20px; border-top: 2px solid #eee; padding-top: 20px; }
+        .option-btn { display: block; width: 100%; padding: 10px; margin: 5px 0; background: #f3f4f6; border: 1px solid #ccc; border-radius: 5px; cursor: pointer; font-size: 1rem; }
+        .option-btn:hover { background: #e5e7eb; }
+        #feedback { font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Language Learning App (Spanish)</h2>
+        <p>Learn daily phrases with pronunciation!</p>
+        
+        <div class="word-box">
+            <span id="foreign-word">Hola</span>
+            <div style="font-size: 0.9rem; color: #555; font-weight: normal; margin-top: 5px;">
+                Meaning: <span id="english-meaning">Hello</span>
+            </div>
+        </div>
+
+        <button class="btn" onclick="speak()">🔊 Listen Pronunciation</button>
+        <button class="btn" onclick="nextLesson()">Next Lesson</button>
+        <button class="btn" style="background:#2563eb;" onclick="startQuiz()">Take a Quiz</button>
+
+        <!-- Quiz Section -->
+        <div class="quiz-box" id="quiz-box">
+            <h3>Quick Quiz</h3>
+            <p id="quiz-question">What does "Hola" mean?</p>
+            <div id="quiz-options"></div>
+            <p id="feedback"></p>
+        </div>
+    </div>
+
+    <script>
+        const lessons = [
+            { word: "Hola", meaning: "Hello", options: ["Goodbye", "Hello", "Thank you"] },
+            { word: "Gracias", meaning: "Thank you", options: ["Please", "Sorry", "Thank you"] },
+            { word: "Buenos días", meaning: "Good morning", options: ["Good morning", "Good night", "Welcome"] },
+            { word: "Adiós", meaning: "Goodbye", options: ["Hello", "Yes", "Goodbye"] }
+        ];
+
+        let currentLessonIndex = 0;
+
+        function nextLesson() {
+            currentLessonIndex = (currentLessonIndex + 1) % lessons.length;
+            document.getElementById('foreign-word').innerText = lessons[currentLessonIndex].word;
+            document.getElementById('english-meaning').innerText = lessons[currentLessonIndex].meaning;
+            document.getElementById('quiz-box').style.display = 'none';
+            document.getElementById('feedback').innerText = '';
+        }
+
+        function speak() {
+            const text = lessons[currentLessonIndex].word;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'es-ES'; // Spanish voice accent
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function startQuiz() {
+            const current = lessons[currentLessonIndex];
+            document.getElementById('quiz-box').style.display = 'block';
+            document.getElementById('quiz-question').innerText = `What does "${current.word}" mean?`;
+            
+            const optionsDiv = document.getElementById('quiz-options');
+            optionsDiv.innerHTML = '';
+            document.getElementById('feedback').innerText = '';
+
+            current.options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.innerText = option;
+                button.onclick = () => checkAnswer(option, current.meaning);
+                optionsDiv.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selected, correct) {
+            const feedback = document.getElementById('feedback');
+            if (selected === correct) {
+                feedback.innerText = "🎉 Correct Answer!";
+                feedback.style.color = "green";
+            } else {
+                feedback.innerText = "❌ Incorrect. Try again!";
+                feedback.style.color = "red";
+            }
+        }
+    </script>
