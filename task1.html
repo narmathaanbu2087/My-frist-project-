@@ -1,0 +1,27 @@
+            const a = document.getElementById('new-answer').value;
+            if(q && a) {
+                flashcards.push({ question: q, answer: a });
+                document.getElementById('new-question').value = '';
+                document.getElementById('new-answer').value = '';
+                currentIndex = flashcards.length - 1;
+                updateCard();
+            } else {
+                alert("Please enter both question and answer");
+            }
+        }
+
+        function deleteCard() {
+            if(flashcards.length > 0) {
+                flashcards.splice(currentIndex, 1);
+                if(currentIndex >= flashcards.length && currentIndex > 0) {
+                    currentIndex--;
+                }
+                updateCard();
+            }
+        }
+
+        // Initialize the first card
+        updateCard();
+    </script>
+</body>
+</html>
