@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flashcards</title>
+</head>
+<body>
+
+    <!-- Inputs and buttons for testing -->
+    <input type="text" id="new-question" placeholder="Enter question">
+    <input type="text" id="new-answer" placeholder="Enter answer">
+    <button onclick="addCard()">Add Card</button>
+    <button onclick="deleteCard()">Delete Card</button>
+    <div id="card-display"></div>
+
+    <script>
+        // Global variables initialization
+        let flashcards = [];
+        let currentIndex = 0;
+
+        function updateCard() {
+            const display = document.getElementById('card-display');
+            if (flashcards.length > 0) {
+                const current = flashcards[currentIndex];
+                display.innerText = `Q: ${current.question} | A: ${current.answer}`;
+            } else {
+                display.innerText = "No flashcards available.";
+            }
+        }
+
+        function addCard() {
+            // Added the missing 'q' definition here
+            const q = document.getElementById('new-question').value;
+            const a = document.getElementById('new-answer').value;
+
+            if (q && a) {
+                flashcards.push({ question: q, answer: a });
+
+                document.getElementById('new-question').value = '';
+                document.getElementById('new-answer').value = '';
+
+                currentIndex = flashcards.length - 1;
+                updateCard();
+            } else {
+                alert("Please enter both question and answer");
+            }
+        }
+
+        function deleteCard() {
+            if (flashcards.length > 0) {
+                flashcards.splice(currentIndex, 1);
+
+                if (currentIndex >= flashcards.length && currentIndex > 0) {
+                    currentIndex--;
+                }
+                updateCard();
+            }
+        }
+
+        // Initialize the first card display
+        updateCard();
+    </script>
+</body>
+</html>
